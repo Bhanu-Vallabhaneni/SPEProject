@@ -1,0 +1,56 @@
+T0-DO ACL
+
+1. Check null values on bidding page load (Done)
+2. Wait three seconds after start slot	(Done)
+3. Premium not tallying	(Fixed) (Problem caused because saif was a lazy ass during testing)
+4. Caption images	(Done) 
+5. Sound Effects	(SL)
+6. Icon Changes for indicators (Done)
+7. New Page : Retrieval. (SL)
+8. Remove Team Owner and increase team logo size. 
+9. Font sizes everywhere.
+
+
+Maha Fast becomes MahaFast
+Dollar ko rupee
+Compress images
+Equate the min and max jar1  125000
+Offline
+Sas2 removed , sas3=sar3 , ma1 image today
+Group2 images today
+Change redirection code in app.js (/gamemaster/assignplayers) to 16 rounds
+
+1. JAR1
+2. SAR2
+3. SAS1
+4. JBT1
+5. SBW
+6. JBT2
+7. JAR3
+8. SBT1
+9. JBW
+10. SAR1
+11. JAS
+12. SBT2
+13. JAR2
+14. **SAR3
+
+
+
+
+Group 2 Dummy
+Group 8 dr.
+SAS 2 Not Present
+SAR3 Present but not in list
+SAS 3 Not Present
+MA 1 Not Present
+
+Current Round
+Base Bid
+Max Bid
+Current Bid
+Total Spent
+Total Premium Spent
+Category
+Bid Increment
+

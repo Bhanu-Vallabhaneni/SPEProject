@@ -1,0 +1,25 @@
+# ./docker-compose.yml
+
+version: '3'
+
+services:
+  database:
+    build: ./db
+    image: bhanu201/db:latest
+    ports:
+      - "3306:3306"
+  redis:
+    build: ./redis
+    image: bhanu201/redis:latest
+    ports:
+        - 6379:6379
+  web:
+    build: .
+    image: bhanu201/ipl:latest
+    depends_on:
+      - database
+      - redis
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
