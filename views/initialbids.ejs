@@ -24,8 +24,25 @@
         <h4 class="modal-title">Rules and Regulations</h4>
       </div>
       <div class="modal-body">
-       
-        <p>1. <b>rules</b>.</p><br>
+				<p>1.No of Players:<br>
+ 			 Boys:​ 9x9 players on the field (Max 11 members per team - any 9 can bat, any 9 can bowl, any 9 can field).</br>
+ 			 Girls:​ 7x7 players on the field (Max 9 members per team - any 7 can bat, any 7 can bowl, any 7 can field).</p><br>
+ 			 <p>2.<strong>No LBW.</strong></p><br>
+ 			 <p>3. Wide = <strong>1</strong> run..</p><br>
+ 			 <p>4. <strong>1</strong> bounce is <strong>allowed</strong> per over.</b>.</p><br>
+ 			 <p>5. <strong>Chucking</strong> (illegal bowling) is <strong>not allowed</strong>.</p><br>
+ 			 <p>6. <strong>No ball = 1 run + free hit.</strong></p><br>
+ 			 <p>7. For a batsman, <strong>1st hit out of the campus</strong> (details will be specified before match starts) is a warning and <strong>2nd hit is OUT.</strong></p><br>
+ 			 <p>8.There is <strong>no warning in ​ no-ball but the warning is there in free hit ball.</strong>​</p><br>
+ 			 <p>9.<strong>Teams must be at ground 15 minutes before the match commences.</strong></p><br>
+ 			 <p>10. Any kind of <strong>abusive behaviour</strong> will result in the <strong>disqualification of players</strong></p><br>
+ 			 <p>11. A <strong>catch is valid</strong>if it’s caught without any contact with an obstacle such as <strong>trees, leaves etc.</strong></p><br>
+ 			 <p>12. A person can be part of only <strong>1 team.</strong> </p><br>
+ 			 <p>13.No runs for <strong>byes</strong> and <strong>leg byes. </p><br>
+ 			 <p>14. ​Overthrows are <strong>valid​ </strong>, i.e runs are there for overthrows and all the rules of overthrow will be applicable here. </p><br>
+ 			 <p>15. <strong>No spot registrations.</strong> </p><br>
+ 			 <p>16.If the bowler bowls from outside the return crease box, he will get a warning once after that the ball will be considered no-ball.</p><br>
+ 			 <p>17.​ In case of disputes or decision making, the <strong>organiser’s decision will be considered final.</strong></p><br>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -35,7 +52,7 @@
 </div>
 
 <header>
-	<img src="images/ACLlogo.png" class="img-fluid" alt="Cinque Terre" width=10vh height=auto hspace="20" > 
+	<img src="images/ACLlogo.png" class="img-fluid" alt="Cinque Terre" width=10vh height=auto hspace="20" >
 	<br><br>
   <h1>Welcome to IPL !</h1>
   <div style="clear: left;"/>
@@ -45,7 +62,7 @@
 </header>
 
 <section>
-	<img src="<%= teamLogo %>" class="img-fluid" alt="Cinque Terre" width=23% height=auto  align="right" > 
+	<img src="<%= teamLogo %>" class="img-fluid" alt="Cinque Terre" width=23% height=auto  align="right" >
 	<div class="input-box"><br><br>
 	<h2 style="padding-left: 10%;"><b>Choose your initial bidding amount.</b></h2>
 	<br>
@@ -84,7 +101,7 @@
     <script src="js/admin.js"></script>
     <script src="js/pages/examples/sign-in.js"></script>
     <script src="js/pages/forms/basic-form-elements.js"></script>
-    <script src="js/acl/render-ejs.js"></script>	
+    <script src="js/acl/render-ejs.js"></script>
     <script src="js/cookies.js"></script>
     <script src="plugins/sweetalert/dist/sweetalert.min.js"></script>
 
@@ -98,10 +115,10 @@
 				swal('Oops...', 'Please select a valid amount!', 'error');
 				return;
 			}
-			var socket = io();	
+			var socket = io();
 			loginData = {"team_id": teamID, "initial_amount": firstBidVal};
 			socket.emit('login', loginData);
-			callback(teamID);	
+			callback(teamID);
 
 		}
 		function reDirect(teamID) {
@@ -115,5 +132,5 @@
 			$("#myModal").modal('show');
 		});
 	</script>
-</body>	
+</body>
 </html>

@@ -75,7 +75,7 @@
 	}
 
 	.text123 {
-		white-space: nowrap; 
+		white-space: nowrap;
 		background-color: #000000;
 		color: white;
 		font-size: 16px;
@@ -88,7 +88,7 @@
 	}
 
 	.caption {
-  			white-space: nowrap; 
+  			white-space: nowrap;
 		    background-color: #000000;
 		    color: white;
 		    font-size: 16px;
@@ -112,8 +112,11 @@
 			font-size: 16px;
 			background-color: #1a1a1a;
 			color: #ffffff;
-			overflow: hidden;	
+			overflow: hidden;
 		    font-style: normal;
+		}
+		img{
+			image-orientation: from-image
 		}
 </style>
 </head>
@@ -253,7 +256,7 @@
 									</select>
 								</div>
 							</div>
-							
+
 							</div>
 						</div>
 						<br>
@@ -264,7 +267,7 @@
 								<button class="btn btn-block bg-red waves-effect" type="submit" style="width: 60;">SUBMIT</button>
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-3 col-xs-12">
-							</div>	
+							</div>
 						</div>
 					</div>
 				</div>
@@ -317,12 +320,12 @@
 		</section>
 	</form>
 
-	
+
 	<script>
 		var teamRankingArray = "<%= teamRankings %>";
 		console.log(teamRankingArray);
 		var actualTeamRankingArray = teamRankingArray.split(',');
-		for(var i=1; i<=6; i+=1) {
+		for(var i=0; i<=10; i+=2)  {
 			if(actualTeamRankingArray[i] == "team1")
 				actualTeamRankingArray[i] = "CSk";
 			else if(actualTeamRankingArray[i] == "team2")
@@ -335,8 +338,8 @@
 				actualTeamRankingArray[i] = "KKR";
 			else
 				actualTeamRankingArray[i] = "Sunrisers";
-			document.getElementById("team"+i).innerHTML = actualTeamRankingArray[i];
-			document.getElementById("price"+i).innerHTML = actualTeamRankingArray[i];
+			document.getElementById("team"+((i/2)+1)).innerHTML = actualTeamRankingArray[i];
+			document.getElementById("price"+((i/2)+1)).innerHTML = actualTeamRankingArray[i+1];
 		}
 	</script>
 
@@ -344,7 +347,7 @@
 		document.querySelector("#selectPlayers").addEventListener('submit', function(e) {
 			e.preventDefault();
 			var form = this;
-			
+
     		swal({
         		title: "Are you sure?",
         		text: "You will not be able to undo this action!",

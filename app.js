@@ -75,7 +75,7 @@ app.post('/gamemaster/control', function(req, res) {
 						if(err4) throw err4;
 						var premium_spent = (150000*6)-reply4[0].net_prem;
 
-						redisClient.zrevrange('aclTeamRanks', 0, 1500000, "withscores", function(err5, reply5) {
+						redisClient.zrevrange('TeamRanks', 0, 1500000, "withscores", function(err5, reply5) {
 
 							res.render('master', {
 								curRound: round,
@@ -96,7 +96,7 @@ app.post('/gamemaster/control', function(req, res) {
 
 
 		});
-	});	
+	});
 });
 
 // Gamemaster - Selection Phase
@@ -120,8 +120,9 @@ app.post('/gamemaster/selection', function(req, res) {
 				var grp_name = res1[0].group_name;
 				var grp_desc = res1[0].group_desc;
 
-				redisClient.zrevrange('aclTeamRanks', 0, 1500000, "withscores", function(err3, reply3) {
+				redisClient.zrevrange('TeamRanks', 0, 1500000, "withscores", function(err3, reply3) {
 					if(err3) throw err3;
+					console.log(reply3);
 					res.render('selection', {
 						curRound: groupID,
 						player_obj:player_object,
@@ -153,17 +154,18 @@ app.post('/gamemaster/assignPlayers', function(req,res){
 	var sixthPlayerTeam = req.body.selectionSix;
 
 	//Adding Players to their respective Teams
-	let sql_player_assign = "UPDATE Players SET team_id = ? WHERE player_id = ?"; 
+	let sql_player_assign = "UPDATE Players SET team_id = ? WHERE player_id = ?";
 	connection.query(sql_player_assign,[firstPlayerTeam,firstPlayerID],function(err, result) {});
-	connection.query(sql_player_assign,[secondPlayerTeam,secondPlayerID],function(err, result) {});
-	connection.query(sql_player_assign,[thirdPlayerTeam,thirdPlayerID],function(err, result) {});
-	connection.query(sql_player_assign,[fourthPlayerTeam,fourthPlayerID],function(err, result) {});
-	connection.query(sql_player_assign,[fifthPlayerTeam,fifthPlayerID],function(err, result) {});
-	connection.query(sql_player_assign,[sixthPlayerTeam,sixthPlayerID],function(err, result) {});
+	// connection.query(sql_player_assign,[secondPlayerTeam,secondPlayerID],function(err, result) {});
+	// connection.query(sql_player_assign,[thirdPlayerTeam,thirdPlayerID],function(err, result) {});
+	// connection.query(sql_player_assign,[fourthPlayerTeam,fourthPlayerID],function(err, result) {});
+	// connection.query(sql_player_assign,[fifthPlayerTeam,fifthPlayerID],function(err, result) {});
+	// connection.query(sql_player_assign,[sixthPlayerTeam,sixthPlayerID],function(err, result) {});
 
 	//Updating Players with the prices.
 	redisClient.get('currentRound', function(err20, groupIdResp) {
-		let playerArray = [firstPlayerID, secondPlayerID, thirdPlayerID, fourthPlayerID, fifthPlayerID, sixthPlayerID];
+		let playerArray = [firstPlayerID];
+		// , secondPlayerID, thirdPlayerID, fourthPlayerID, fifthPlayerID, sixthPlayerID
 		redisClient.hget("team1", 'yourBid', function(err,result){
 			if(err) throw err;
 			let sql_player_price = "UPDATE Players SET price = ? WHERE team_id = ? AND group_id = ?";
@@ -262,7 +264,7 @@ app.post('/gamemaster/assignPlayers', function(req,res){
 			connection.query(sql_prem_left,[result,6],function(err2,res2){});
 		});
 
-		redisClient.zrevrange('aclTeamRanks', 0, 15000000, function(err2, rankingArray) {
+		redisClient.zrevrange('TeamRanks', 0, 15000000, function(err2, rankingArray) {
 			if(err2) throw err2;
 			var nextRound = parseInt(groupIdResp) + 1;
 			// console.log("TAG: 1Sabari Next Round:" + nextRound);
@@ -271,7 +273,7 @@ app.post('/gamemaster/assignPlayers', function(req,res){
 				var baseBidForNextRound = reply50[0].base_bid;
 				for(var i=0; i<6; i++) {
 					var teamCodeInSortedSet = rankingArray[i];
-					redisClient.zadd('aclTeamRanks', baseBidForNextRound + i * 1000, teamCodeInSortedSet);
+					redisClient.zadd('TeamRanks', baseBidForNextRound + i * 1000, teamCodeInSortedSet);
 					redisClient.hset(teamCodeInSortedSet, 'yourBid', baseBidForNextRound + i * 1000);
 					// console.log(teamCodeInSortedSet + " " + baseBidForNextRound + i * 1000);
 				}
@@ -353,7 +355,7 @@ app.post('/authenticate', function(req, res) {
 	var user = req.body.teamName;
 	var password = req.body.password;
 
-	if((user==1 && password=="csk")||(user==2 && password=="dc")||(user==3 && password=="rcb")||(user==4 && password=="MI")||(user==5 && password=="KKR")||(user==6 && password=="sunrisers")){
+	if((user==1 && password=="csk")||(user==2 && password=="dc")||(user==3 && password=="rcb")||(user==4 && password=="MI")||(user==5 && password=="KKR")||(user==6 && password=="srh")){
 		//Set cookie in client side accessible to client
 		res.cookie('teamToken', user, { maxAge: 24 * 60 * 60 * 1000, httpOnly: false});
 		res.render('index.ejs', {
@@ -386,10 +388,10 @@ app.post('/teamprofile', function(req, res) {
 	var key = "team" + teamID;
 	redisClient.exists(key, function(err, reply) {
 		if (reply != 1) {
-			console.log("Redis entry" + key + "doesnt exist");	    	  
+			console.log("Redis entry" + key + "doesnt exist");
 		}
 	});
-	
+
 	var results;
 	let sql1 = "SELECT p.player_fname, p.player_lname, p.player_image, g.group_name, p.price FROM Players p, Groups g WHERE p.team_id = ? AND p.group_id = g.group_id";
 	connection.query(sql1, [teamID], function(err, result) {
@@ -401,14 +403,14 @@ app.post('/teamprofile', function(req, res) {
 	connection.query(sql, [teamID], function(err, result) {
 		if(err) throw err;
 
-		redisClient.zscore('aclTeamRanks', key, function(err1, reply){
+		redisClient.zscore('TeamRanks', key, function(err1, reply){
 			// console.log("Team Rank", reply);
 			var totalSpent = parseInt(result[0].points_spent) + parseInt(reply);
 
 			redisClient.hgetall("team" + teamID, function(err, object) {
 				var teamObject = object;
 
-				res.render('teamprofile', { 
+				res.render('teamprofile', {
 					teamName: result[0].team_name,
 					teamOwner: result[0].team_owner,
 					teamLogo: result[0].team_logo,
@@ -434,7 +436,7 @@ app.post('/bidding', function(req, res) {
 		connection.query(sql_count, function(err, result) {
 			if(err) throw err;
 			var out = result[0].no_of_rounds/6;
-		
+
 			currRound = Math.floor(out)+1;
 
 			let sql_groups = "SELECT * FROM Groups WHERE group_id = ?";
@@ -466,7 +468,7 @@ app.post('/bidding', function(req, res) {
 										teamRank = teamObject.rank;
 										yourBid = teamObject.yourBid;
 
-										redisClient.zrevrange('aclTeamRanks', 0, 1500000, "withscores", function(err3, reply3) {
+										redisClient.zrevrange('TeamRanks', 0, 1500000, "withscores", function(err3, reply3) {
 											if(err3) throw err3;
 
 											if(currBid >= grp_obj[0].max_bid){
@@ -507,7 +509,7 @@ app.post('/bidding', function(req, res) {
 						}
 						else {
 							var disableBtn = true;
-							redisClient.zrevrange('aclTeamRanks', 0, 15000000, "withscores", function(err4, reply4) {
+							redisClient.zrevrange('TeamRanks', 0, 15000000, "withscores", function(err4, reply4) {
 								res.render('bidding.ejs', {
 									currentRound: currRound,
 									group_object: grp_obj,
@@ -545,31 +547,31 @@ io.on('connection', function(client) {
 					redisClient.set('currentBid', currBid);
 					redisClient.hgetall(team, function(err5, teamObject) {
 						// console.log("CurrBid-teamObj.yourBid for " + team + " = " + (currBid - teamObject.yourBid));
-						redisClient.zadd('aclTeamRanks', currBid, team);
+						redisClient.zadd('TeamRanks', currBid, team);
 						redisClient.hset(team, 'yourBid', currBid);
-						redisClient.zrevrank('aclTeamRanks', team, function(err3, reply3) {
+						redisClient.zrevrank('TeamRanks', team, function(err3, reply3) {
 							if(err3) throw err3;
 							redisClient.hset(team, 'rank', parseInt(reply3)+1);
 						});
 						if(currBid == maxBid)
 							btnDisable = true;
 
-						redisClient.zrevrange('aclTeamRanks', 0, currBid, "withscores", function(err2, reply2) {
+						redisClient.zrevrange('TeamRanks', 0, currBid, "withscores", function(err2, reply2) {
 							if(err2) throw err2;
 							var currObject = {"currentBid": currBid, "disableFlag": btnDisable, "ranks": reply2};
-							io.sockets.emit('bidBtnClicked', currObject);	
+							io.sockets.emit('bidBtnClicked', currObject);
 						});
 					});
 				}
 				else {
 					btnDisable = true;
-					redisClient.zrevrange('aclTeamRanks', 0, currBid, "withscores", function(err2, reply2) {
+					redisClient.zrevrange('TeamRanks', 0, currBid, "withscores", function(err2, reply2) {
 						if(err2) throw err2;
 						var currObject = {"currentBid": currBid, "disableFlag": btnDisable, "ranks": reply2};
-						io.sockets.emit('bidBtnClicked', currObject);	
+						io.sockets.emit('bidBtnClicked', currObject);
 					});
 				}
-				
+
 			});
 		});
 	});
@@ -580,7 +582,7 @@ io.on('connection', function(client) {
 		redisClient.get('currentBid', function(err, reply) {
 			if(err) throw err;
 			var currBid = parseInt(reply);
-			currBid+=2000;
+			currBid+=1000;
 			redisClient.hgetall(team, function(err4, teamObject) {
 				if(err4) throw err4;
 
@@ -599,9 +601,9 @@ io.on('connection', function(client) {
 					}
 					else if(flagBeingSentFromPremiumBtnOnClick == 1){
 						//team is already in premium. premiumSpent = HTMLCurrBid - HTMLTeamPrevBid + 2000;
-						var premiumSpent = currBid - teamPrevBid; 
+						var premiumSpent = currBid - teamPrevBid;
 						var newPremium = teamObject.premLeft - premiumSpent;
-						redisClient.hset(team, 'premLeft', newPremium);	
+						redisClient.hset(team, 'premLeft', newPremium);
 						// client.emit('updatePremiumValue', newPremium);
 						redisClient.hgetall(team, function(err, object) {
 							// console.log("flagBeingSentFromPremiumBtnOnClick = 1\n" + object.premLeft + "\nEND 117Sabari\n");
@@ -611,12 +613,12 @@ io.on('connection', function(client) {
 			});
 			redisClient.set('currentBid', currBid);
 			redisClient.hset(team, 'yourBid', currBid);
-			redisClient.zadd('aclTeamRanks', currBid, team);
-			redisClient.zrevrank('aclTeamRanks', team, function(err3, reply3) {
+			redisClient.zadd('TeamRanks', currBid, team);
+			redisClient.zrevrank('TeamRanks', team, function(err3, reply3) {
 				if(err3) throw err3;
 				redisClient.hset(team, 'rank', (parseInt(reply3)+1));
 			});
-			redisClient.zrevrange('aclTeamRanks', 0, currBid, "withscores", function(err2, reply2) {
+			redisClient.zrevrange('TeamRanks', 0, currBid, "withscores", function(err2, reply2) {
 				if(err2) throw err2;
 				var currObject = {"currentBid": currBid, "ranks": reply2};
 				io.sockets.emit('premiumBidBtnClicked', currObject);
@@ -640,8 +642,8 @@ io.on('connection', function(client) {
 
 		let key = "team" + teamID;
 
-		redisClient.zadd('aclTeamRanks', firstBid, key);
-		redisClient.zrevrange('aclTeamRanks', 0, 1500000, "withscores", function(err, reply) {
+		redisClient.zadd('TeamRanks', firstBid, key);
+		redisClient.zrevrange('TeamRanks', 0, 1500000, "withscores", function(err, reply) {
 			io.sockets.emit('master-ranking', reply);
 		});
 

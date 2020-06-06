@@ -39,7 +39,7 @@
 	.image123 {
 		display: block;
 		width: 100%;
-		/* height: auto; */ 
+		/* height: auto; */
 	}
 
 	.overlay123 {
@@ -60,7 +60,7 @@
 	}
 
 	.text123 {
-		white-space: nowrap; 
+		white-space: nowrap;
 		background-color: #000000;
 		color: white;
 		font-size: 16px;
@@ -70,6 +70,9 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 		-ms-transform: translate(-50%, -50%);
+	}
+	img{
+		image-orientation: from-image
 	}
 </style>
 </head>
@@ -206,7 +209,7 @@
 					<div class="body">
 						<div id="gallery-images" class="list-unstyled row clearfix">
 							<div class="container1">
-								<img class="thumbnail image123" src="..<%= teams[1].team_logo %>">
+								<img class="thumbnail image123" src="..<%= teams[1].team_logo %>" >
 								<div class="overlay123" id="1">
 									<div class="text123"><%= teams[1].team_name %></div>
 								</div>
@@ -229,7 +232,7 @@
 					<div class="body">
 						<div id="gallery-images" class="list-unstyled row clearfix">
 							<div class="container1">
-								<img class="thumbnail image123" src="..<%= teams[2].team_logo %>">
+								<img class="thumbnail image123" src="..<%= teams[2].team_logo %>" >
 								<div class="overlay123" id="1">
 									<div class="text123"><%= teams[2].team_name %></div>
 								</div>
@@ -283,7 +286,7 @@
 					<div class="body">
 						<div id="gallery-images" class="list-unstyled row clearfix">
 							<div class="container1">
-								<img class="thumbnail image123" src="..<%= teams[4].team_logo %>">
+								<img class="thumbnail image123" src="..<%= teams[4].team_logo %>" >
 								<div class="overlay123" id="1">
 									<div class="text123"><%= teams[4].team_name %></div>
 								</div>

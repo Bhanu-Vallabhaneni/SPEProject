@@ -62,7 +62,7 @@
 		}
 
 		.text123 {
-		  white-space: nowrap; 
+		  white-space: nowrap;
 		  background-color: #000000;
 		  color: white;
 		  font-size: 16px;
@@ -75,7 +75,7 @@
 		}
 
 		.caption {
-  			white-space: nowrap; 
+  			white-space: nowrap;
 		    background-color: #000000;
 		    color: white;
 		    font-size: 16px;
@@ -97,8 +97,11 @@
 		figcaption {
 			font-size: 18px;
 			background-color: #1a1a1a;
-			color: #ffffff;	
+			color: #ffffff;
 		    font-style: normal;
+		}
+		img{
+			image-orientation: from-image
 		}
 	</style>
 	<script>
@@ -122,7 +125,7 @@
 				socket.emit('stopBidding', "Disable bid and premium bid buttons");
 				btn.disabled = true;
 				setTimeout(function(){btn.disabled = false;},1000);
-			}			
+			}
 		}
 
 		socket.on('stopBidding', function(data) {
@@ -142,7 +145,7 @@
 		});
 
 		socket.on('master-ranking', function(data) {
-			for(var i=1; i<=6; i++) {
+			for(var i=0; i<=10; i+=2) {
 				if(data[i] == "team1")
 					data[i] = "CSk";
 				else if(data[i] == "team2")
@@ -155,13 +158,13 @@
 					data[i] = "KKR";
 				else
 					data[i] = "Sunrisers";
-				document.getElementById("team"+i).innerHTML = data[i];
-				document.getElementById("price"+i).innerHTML = data[i];
+				document.getElementById("team"+((i/2)+1)).innerHTML = data[i];
+				document.getElementById("price"+((i/2)+1)).innerHTML = data[i];
 				document.getElementById("div-currBid").innerHTML = data[1];
 			}
-		});	
+		});
 		socket.on('bidBtnClicked', function(data) {
-			for(var i=1; i<=6; i++) {
+			for(var i=0; i<=10; i+=2) {
 				if(data.ranks[i] == "team1")
 					data.ranks[i] = "CSk";
 				else if(data.ranks[i] == "team2")
@@ -178,9 +181,9 @@
 				document.getElementById("price"+i).innerHTML = data.ranks[i+1];
 				document.getElementById("div-currBid").innerHTML = data.currentBid;
 			}
-		});	
+		});
 		socket.on('premiumBidBtnClicked', function(data) {
-			for(var i=1; i<=6; i+=1) {
+			for(var i=0; i<=10; i+=2) {
 				if(data.ranks[i] == "team1")
 					data.ranks[i] = "CSk";
 				else if(data.ranks[i] == "team2")
@@ -197,7 +200,7 @@
 				document.getElementById("price"+i).innerHTML = data.ranks[i+1];
 				document.getElementById("div-currBid").innerHTML = data.currentBid;
 			}
-		});	
+		});
 	</script>
 </head>
 
@@ -263,7 +266,7 @@
 					<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Game Master</div>
 				</div>
 			</div>
-			
+
 			<!-- #User Info -->
 			<!-- Menu -->
 			<div class="menu">
@@ -302,7 +305,7 @@
 			<!-- #Footer -->
 		</aside>
 		<!-- #END# Left Sidebar -->
-		
+
 	</section>
 
 
@@ -452,7 +455,7 @@
 					<div class="card">
 						<div class="body">
 							<button type="button" class="btn bg-green btn-block btn-lg" style="height: 50px;" onclick="buttonClick();" id="the_only_btn">START SLOT</button>
-							<button type="button" class="btn bg-green btn-block btn-lg" style="height: 50px;" onclick="refreshPages();" id="refresh_pages_button">REFRESH PAGES</button>	
+							<button type="button" class="btn bg-green btn-block btn-lg" style="height: 50px;" onclick="refreshPages();" id="refresh_pages_button">REFRESH PAGES</button>
 						</div>
 					</div>
 				</div>
@@ -471,7 +474,7 @@
 		                        		</figure>
 		                        	</div>
 								</div>
-								
+
 							</div>
 						</div>
 					</div>
@@ -480,9 +483,9 @@
 				</div>
 				<!-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 					<br><br><br><br><br><br><br>
-					
+
 				</div> -->
-			</div>	
+			</div>
 		</div>
 	</section>
 
@@ -490,9 +493,9 @@
 		var teamRankingArray = "<%= teamRankings %>";
 		console.log(teamRankingArray);
 		var actualTeamRankingArray = teamRankingArray.split(',');
-		for(var i=1; i<=6; i+=1) {
+		for(var i=0; i<=10; i+=2) {
 			if(actualTeamRankingArray[i] == "team1")
-				actualTeamRankingArray[i] = "CSk";
+				actualTeamRankingArray[i] = "Csk";
 			else if(actualTeamRankingArray[i] == "team2")
 				actualTeamRankingArray[i] = "Delhi Capitals";
 			else if(actualTeamRankingArray[i] == "team3")
@@ -503,8 +506,8 @@
 				actualTeamRankingArray[i] = "KKR";
 			else
 				actualTeamRankingArray[i] = "Sunrisers";
-			document.getElementById("team"+i).innerHTML = actualTeamRankingArray[i];
-			document.getElementById("price"+i).innerHTML = actualTeamRankingArray[i];
+			document.getElementById("team"+((i/2)+1)).innerHTML = actualTeamRankingArray[i];
+			document.getElementById("price"+((i/2)+1)).innerHTML = actualTeamRankingArray[i+1];
 		}
 
 

@@ -80,14 +80,18 @@
 			transform: translate(-50%, -50%);
 			-ms-transform: translate(-50%, -50%);
 		}
-		
+
+		img{
+			image-orientation: from-image
+		}
+
 	</style>
 </head>
 
 
 
 <body class="theme-red">
-	
+
 	<!-- <audio id="sound1" src=".ounds/bidbtn.mp3" preload="auto"></audio> -->
 
 	<style>
@@ -373,7 +377,7 @@
 										</div>
 									</div>
 								</div>
-								
+
 							</div>
 						</div>
 					</div>
@@ -415,7 +419,7 @@
 						var newprem = prem - premiumSpent;
 						document.getElementById('div-premLeft').innerHTML = newprem;
 					}
-					
+
 				}
 				else if(HTMLTeamPrevBid >= HTMLMaxBid){
 					var premiumSpent = HTMLCurrBid - HTMLTeamPrevBid + 2000;
@@ -440,11 +444,12 @@
 				// else
 				// 	alert("You do not have any premium amount left!");
 			});
-			
+
 			socket.on('bidBtnClicked',function(data) {
+				console.log(data);
 				document.getElementById("div-currBid").innerHTML=data.currentBid;
 				if(btnClickFlag) {
-					document.getElementById("div-yourBid").innerHTML = data.currentBid;				
+					document.getElementById("div-yourBid").innerHTML = data.currentBid;
 					btnClickFlag = false;
 				}
 				if(data.disableFlag) {
@@ -471,15 +476,17 @@
 				$('#mainTable tr').removeClass("bg-orange");
 				var j;
 				var currentTeam = "team" + getCookie("teamToken");
-				for(j=1; j<=6; j+=1) {
-					if(data.ranks[j] == currentTeam) {
+				console.log(currentTeam);
+				for(j=0; j<=10; j+=2) {
+					if(data.ranks[j/2] == currentTeam) {
+						console.log(currentTeam);
 						break;
-					}		
+					}
 				}
 				var rank = (j/2)+1;
-				document.getElementById('mainTable').rows[rank].className = "bg-orange";	
+				document.getElementById('mainTable').rows[rank].className = "bg-orange";
 				document.getElementById('div-yourRank').innerHTML = rank;
-				for(var i=1; i<=6; i+=1) {
+				for(var i=0; i<=10; i+=2) {
 					if(data.ranks[i] == "team1")
 						data.ranks[i] = "CSk";
 					else if(data.ranks[i] == "team2")
@@ -492,30 +499,32 @@
 						data.ranks[i] = "KKR";
 					else
 						data.ranks[i] = "Sunrisers";
-					document.getElementById("team"+i).innerHTML = data.ranks[i];
-					document.getElementById("price"+i).innerHTML = data.ranks[i+1];
-				}	
+					document.getElementById("team"+((i/2)+1)).innerHTML = data.ranks[i];
+					document.getElementById("price"+((i/2)+1)).innerHTML = data.ranks[i+1];
+				}
 			});
 
 			socket.on('premiumBidBtnClicked', function(data) {
 				document.getElementById("div-currBid").innerHTML=data.currentBid;
 				// if(premiumBtnClickFlag) {
-				// 	document.getElementById("div-yourBid").innerHTML = data.currentBid;	
-				// 	var premLeft = document.getElementById			
+				// 	document.getElementById("div-yourBid").innerHTML = data.currentBid;
+				// 	var premLeft = document.getElementById
 				// 	premuimBtnClickFlag = false;
 				// }
 				$('#mainTable tr').removeClass("bg-orange");
 				var j;
 				var currentTeam = "team" + getCookie("teamToken");
-				for(j=1; j<=6; j+=1) {
-					if(data.ranks[j] == currentTeam)
+				console.log(currentTeam);
+				for(j=0; j<=10; j+=2) {
+					if(data.ranks[j/2] == currentTeam)
 						break;
 				}
 				var rank = (j/2)+1;
+				console.log(data)
 				document.getElementById('mainTable').rows[rank].className = "bg-orange";
 				document.getElementById('div-yourRank').innerHTML = rank;
 				document.getElementById('div-yourBid').innerHTML = data.ranks[j+1];
-				for(var i=1; i<=6; i++) {
+				for(var i=0; i<=10; i+=2) {
 					if(data.ranks[i] == "team1")
 						data.ranks[i] = "CSk";
 					else if(data.ranks[i] == "team2")
@@ -528,8 +537,8 @@
 						data.ranks[i] = "KKR";
 					else
 						data.ranks[i] = "Sunrisers";
-					document.getElementById("team"+i).innerHTML = data.ranks[i];
-					document.getElementById("price"+i).innerHTML = data.ranks[i+1];
+					document.getElementById("team"+((i/2)+1)).innerHTML = data.ranks[i];
+					document.getElementById("price"+((i/2)+1)).innerHTML = data.ranks[i+1];
 				}
 			});
 
@@ -588,7 +597,7 @@
 		btn_used_for_bid.classList.add("bg-grey");
 		btn_used_for_premium.classList.remove("bg-grey");
 		btn_used_for_premium.classList.add("bg-red");
-	} 
+	}
 	else if (intBtnFlag == 0) {
 		btn_used_for_bid.disabled = true;
 		btn_used_for_premium.disabled = true;
@@ -604,15 +613,15 @@
 
 	var j;
 	var currentTeam = "team" + getCookie("teamToken");
-	for(j=1; j<=6; j+=1) {
-		if(actualTeamRankingArray[j] == currentTeam) {
+	for(j=0; j<=10; j+=2) {
+		if(actualTeamRankingArray[j/2] == currentTeam) {
 			break;
-		}		
+		}
 	}
 	var rank = (j/2)+1;
-	// document.getElementById('mainTable').rows[rank].className = "bg-orange";	
+	// document.getElementById('mainTable').rows[rank].className = "bg-orange";
 	document.getElementById('div-yourRank').innerHTML = rank;
-	for(var i=1; i<=6; i+=1) {
+	for(var i=0; i<=10; i+=2){
 		if(actualTeamRankingArray[i] == "team1")
 			actualTeamRankingArray[i] = "CSk";
 		else if(actualTeamRankingArray[i] == "team2")
@@ -625,8 +634,8 @@
 			actualTeamRankingArray[i] = "KKR";
 		else
 			actualTeamRankingArray[i] = "Sunrisers";
-		document.getElementById("team"+i).innerHTML = actualTeamRankingArray[i];
-		document.getElementById("price"+i).innerHTML = actualTeamRankingArray[];
+		document.getElementById("team"+((i/2)+1)).innerHTML = actualTeamRankingArray[i];
+		document.getElementById("price"+((i/2)+1)).innerHTML = actualTeamRankingArray[i+1];
 	}
 </script>
 
